@@ -1,13 +1,15 @@
-import Color3 from "../../utils/Color3";
-import Vector3 from "../../utils/math/Vector3";
-import { Point3 } from "../../utils/types";
-import Ray from "../Ray";
+import Color3 from '../../utils/Color3';
+import Vector3 from '../../utils/math/Vector3';
+import { Point3 } from '../../utils/types';
+import Ray from '../Ray';
+import Geometry from './Geometry';
 
-export class Sphere {
+export class Sphere extends Geometry {
   center: Point3;
   radius: number;
 
   constructor(center: Point3, radius: number) {
+    super('Sphere');
     this.center = center;
     this.radius = radius;
   }

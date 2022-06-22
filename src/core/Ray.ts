@@ -1,5 +1,5 @@
-import Vector3 from "../utils/math/Vector3";
-import { Point3 } from "../utils/types";
+import Vector3 from '../utils/math/Vector3';
+import { Point3 } from '../utils/types';
 
 class Ray {
   origin: Point3;

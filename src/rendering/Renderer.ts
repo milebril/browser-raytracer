@@ -1,8 +1,10 @@
-import { Sphere } from "../core/geometry/Sphere";
-import Ray from "../core/Ray";
-import Color3 from "../utils/Color3";
-import Vector3 from "../utils/math/Vector3";
-import { Color4, Point3 } from "../utils/types";
+import Line from '../core/geometry/Line';
+import { Sphere } from '../core/geometry/Sphere';
+import Triangle from '../core/geometry/Triangle';
+import Ray from '../core/Ray';
+import Color3 from '../utils/Color3';
+import Vector3 from '../utils/math/Vector3';
+import { Color4, Point3 } from '../utils/types';
 
 class Renderer {
   canvas: HTMLCanvasElement;
@@ -20,14 +22,14 @@ class Renderer {
 
   constructor(canvas: HTMLCanvasElement, aspectRatio: number) {
     this.canvas = canvas;
-    this.context = canvas.getContext("2d");
+    this.context = canvas.getContext('2d');
     this.canvasWidth = canvas.width;
     this.canvasHeight = canvas.height;
     this.imageData = this.context.getImageData(
       0,
       0,
       this.canvasWidth,
-      this.canvasHeight
+      this.canvasHeight,
     );
 
     const viewport_height = 2.0;
@@ -47,10 +49,20 @@ class Renderer {
     this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
   }
 
-  sphere = new Sphere(new Vector3(0, 0, -2), 0.5);
+  sphere = new Sphere(new Vector3(1, 0, -2), 0.5);
+  triangle = new Triangle(
+    new Vector3(-1, -1, -2),
+    new Vector3(1, -1, -2),
+    new Vector3(0, 1, -2),
+  );
+  line = new Line(new Vector3(1, 0, -10), new Vector3(0, 1, 0));
   rayColor(r: Ray): Color3 {
     if (this.sphere.hit(r)) {
       return this.sphere.getColor();
+    } else if (this.triangle.hit(r)) {
+      return this.triangle.getColor(r);
+    } else if (this.line.hit(r)) {
+      return this.line.getColor(r);
     }
 
     const unitDirection = r.direction.normalize();
@@ -73,14 +85,14 @@ class Renderer {
           this.lowerLeftCorner
             .add(this.horizontal.scale(u))
             .add(this.vertical.scale(v))
-            .subtract(this.origin)
+            .subtract(this.origin),
         );
 
         const pixelColor = this.rayColor(r);
         this.drawPixel(
           i,
           Math.abs(j - this.canvasHeight),
-          pixelColor.toColor4()
+          pixelColor.toColor4(),
         );
       }
       this.render();

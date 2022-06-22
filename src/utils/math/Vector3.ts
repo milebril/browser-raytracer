@@ -51,7 +51,15 @@ class Vector3 {
     return new Vector3(
       this.y * vec.z - this.z * vec.y,
       this.z * vec.x - this.x * vec.z,
-      this.x * vec.y - this.y * vec.x
+      this.x * vec.y - this.y * vec.x,
+    );
+  }
+
+  static cross(vec1: Vector3, vec2: Vector3): Vector3 {
+    return new Vector3(
+      vec1.y * vec2.z - vec1.z * vec2.y,
+      vec1.z * vec2.x - vec1.x * vec2.z,
+      vec1.x * vec2.y - vec1.y * vec2.x,
     );
   }
 
