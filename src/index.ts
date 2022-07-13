@@ -12,6 +12,7 @@ function component() {
 
   console.time('Render Time');
   // renderer.drawGradient();
+  renderer.populateScene();
   renderer.drawScreen();
   renderer.render();
   console.timeEnd('Render Time');

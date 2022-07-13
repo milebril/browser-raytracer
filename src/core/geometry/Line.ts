@@ -2,7 +2,7 @@ import Color3 from '../../utils/Color3';
 import Vector3 from '../../utils/math/Vector3';
 import { Point3 } from '../../utils/types';
 import Ray from '../Ray';
-import Geometry from './Geometry';
+import Geometry, { HitRecord } from './Geometry';
 
 class Line extends Geometry {
   point: Point3;
@@ -17,7 +17,7 @@ class Line extends Geometry {
   // p13 == p1-p3 = point - r.origin = PO
   // p21 = direction
   // p43 = ray.direction
-  hit(ray: Ray): boolean {
+  hit(ray: Ray): HitRecord | null {
     const PO = this.point.subtract(ray.origin);
 
     const d1343 = Vector3.dot(PO, ray.direction);
@@ -28,7 +28,7 @@ class Line extends Geometry {
 
     const denom = d2121 * d4343 - d4321 * d4321;
     if (Math.abs(denom) < 1e-10) {
-      return false;
+      return null;
     }
 
     const numer = d1343 * d4321 - d1321 * d4343;
@@ -46,7 +46,12 @@ class Line extends Geometry {
     resultSegmentPoint2.y = ray.origin.y + mub * ray.direction.y;
     resultSegmentPoint2.z = ray.origin.z + mub * ray.direction.z;
 
-    return resultSegmentPoint1.subtract(resultSegmentPoint2).length() < 1e-2;
+    if (resultSegmentPoint1.subtract(resultSegmentPoint2).length() < 1e-2) {
+      return null;
+      // return 1;
+    } else {
+      return null;
+    }
   }
 
   getColor(_ray: Ray): Color3 {

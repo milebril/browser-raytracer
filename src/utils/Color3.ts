@@ -1,4 +1,4 @@
-import { Color4 } from "./types";
+import { Color4 } from './types';
 
 class Color3 {
   x: number;
@@ -16,11 +16,11 @@ class Color3 {
   }
 
   add(vec: Color3) {
-    return new Color3(this.x + vec.x, this.y + vec.y, this.y + vec.y);
+    return new Color3(this.x + vec.x, this.y + vec.y, this.z + vec.z);
   }
 
   subtract(vec: Color3) {
-    return new Color3(this.x - vec.x, this.y - vec.y, this.y - vec.y);
+    return new Color3(this.x - vec.x, this.y - vec.y, this.z - vec.z);
   }
 
   multiply(vec: Color3) {
@@ -49,7 +49,7 @@ class Color3 {
     return new Color3(
       this.y * vec.z - this.z * vec.y,
       this.z * vec.x - this.x * vec.z,
-      this.x * vec.y - this.y * vec.x
+      this.x * vec.y - this.y * vec.x,
     );
   }
 

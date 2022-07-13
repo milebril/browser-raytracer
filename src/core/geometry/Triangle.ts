@@ -1,8 +1,8 @@
 import Color3 from '../../utils/Color3';
 import Vector3 from '../../utils/math/Vector3';
-import { Point3 } from '../../utils/types';
+import { ColorType, Point3 } from '../../utils/types';
 import Ray from '../Ray';
-import Geometry from './Geometry';
+import Geometry, { HitRecord } from './Geometry';
 
 class Triangle extends Geometry {
   private a: Point3;
@@ -16,7 +16,7 @@ class Triangle extends Geometry {
     this.c = c;
   }
 
-  hit(ray: Ray): boolean {
+  hit(ray: Ray): HitRecord | null {
     // Efficient Implementation
     const E1 = this.b.subtract(this.a);
     const E2 = this.c.subtract(this.a);
@@ -30,16 +30,37 @@ class Triangle extends Geometry {
     const v = -Vector3.dot(E1, DAO) * invertedDeterminant;
     const t = Vector3.dot(AO, N) * invertedDeterminant;
 
-    return (
-      determinant >= 1e-6 && t >= 0.0 && u >= 0.0 && v >= 0.0 && u + v <= 1.0
-    );
+    if (
+      determinant >= 1e-6 &&
+      t >= 0.0 &&
+      u >= 0.0 &&
+      v >= 0.0 &&
+      u + v <= 1.0
+    ) {
+      const hitRecord = new HitRecord();
+      hitRecord.t = t;
+      hitRecord.intersectionPoint = ray.cast(hitRecord.t);
+      hitRecord.setFaceNormal(ray, N.normalize());
+      return hitRecord;
+    } else {
+      return null;
+    }
 
     // Intersection point: R.Origin + t * R.Dir
     // The barycentric coordinates of the intersection in the triangle are u, v, 1-u-v
   }
 
-  getColor(_ray: Ray): Color3 {
-    return new Color3(1, 0.4, 0.6);
+  getColor(_ray: Ray, hitRecord: HitRecord, type = ColorType.DEFAULT): Color3 {
+    if (type === ColorType.DEFAULT) {
+      return new Color3(1, 0.4, 0.6);
+    } else if (type === ColorType.NORMAL) {
+      // console.log(hitRecord.normal.x, hitRecord.normal.y, hitRecord.normal.z);
+      return new Color3(
+        hitRecord.normal.x + 1,
+        hitRecord.normal.y + 1,
+        hitRecord.normal.z + 1,
+      ).scale(0.5);
+    }
   }
 }
 
