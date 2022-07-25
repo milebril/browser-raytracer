@@ -82,6 +82,34 @@ class Vector3 {
   toArray() {
     return [this.x, this.y, this.z];
   }
+
+  static random(): Vector3 {
+    return new Vector3(Math.random(), Math.random(), Math.random());
+  }
+
+  static randomBetween(min: number, max: number): Vector3 {
+    return new Vector3(
+      Math.random() * (max - min) + min,
+      Math.random() * (max - min) + min,
+      Math.random() * (max - min) + min,
+    );
+  }
+
+  static randomInUnitSphere(): Vector3 {
+    let vec: Vector3;
+
+    while (vec == undefined) {
+      const tmp = Vector3.randomBetween(-1, 1);
+      if (tmp.lengthSquared() >= 1) continue;
+      vec = tmp;
+    }
+
+    return vec;
+  }
+
+  static randomUnitVector(): Vector3 {
+    return this.randomInUnitSphere().normalize();
+  }
 }
 
 export default Vector3;

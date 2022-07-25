@@ -8,7 +8,7 @@ function component() {
   canvas.width = imageWidth;
   canvas.height = imageHeight;
 
-  const renderer = new Renderer(canvas, aspectRatio);
+  const renderer = new Renderer(canvas);
 
   console.time('Render Time');
   // renderer.drawGradient();
